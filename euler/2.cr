@@ -8,29 +8,31 @@ class Fibonacci
   include Iterator(Int32)
 
   def initialize
-    @fib = [] of Int32
+    @seq = [] of Int32
     @step = 0
   end
 
   def next
-    @step = @step + 1
+    @step += 1
 
     if @step == 1
-      @fib << 0 << 1
+      @seq << 0 << 1
     elsif @step == 2
-      @fib << 2
+      @seq << 2
       return 2
     end
 
-    sum = @fib[-2..-1].sum()
-    @fib = @fib << sum
+    sum = take_last(2).sum().tap do |s|
+      @seq << s
+    end
+  end
 
-    sum
+  private def take_last(n)
+    @seq[-n..-1]
   end
 end
 
 fib = Fibonacci.new
-
 puts fib.take_while(&.< 4_000_000).select(&.even?).sum()
 
 # time crystal 2.cr
